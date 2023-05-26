@@ -13,15 +13,7 @@ repositories
 
 Assignment 2
 
-- Include PlaceLab API LoginTest into Test Automation suite (RESTAssured, Java, TestNG and 
-Maven
-<!-- Rest Assured --> 
-<dependency> 
-    <groupId>io.rest-assured</groupId> 
-    <artifactId>rest-assured</artifactId> 
-    <version>5.3.0</version> 
-    <scope>test</scope> 
-</dependency> 
+- Include PlaceLab API LoginTest into Test Automation suite (RESTAssured, Java, TestNG and Maven
 
 Create a PR for review.
 
