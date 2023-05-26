@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="PlaceLab tests" verbose="1" >
+    <test name="Smoke test">
+        <parameter name="browser" value="Chrome" />
+        <parameter name="validEmail" value="dzana.asja.hasanovic@gmail.com" />
+        <parameter name="invalidEmail" value="dzana.asja@gmail.com" />
+        <parameter name="emptyEmail" value=" " />
+        <parameter name="invalidPassword" value="password123" />
+        <classes>
+            <class name="placelab.tests.LoginTest" />
+        </classes>
+    </test>
+</suite>

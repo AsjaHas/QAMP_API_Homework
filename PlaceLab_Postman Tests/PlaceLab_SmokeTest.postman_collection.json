@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "67197775-88ef-410a-bc52-8a3ffa1cbe1a",
+		"name": "PlaceLab_SmokeTest",
+		"description": "The main functionalities of the PlaceLab site include the ability to log in, create a data extraction report, and verify the successful creation of the report for further data utilization. The Data Extraction report feature allows users to extract data from websites by providing a text file. To begin, users must log in using their credentials. When creating a Data Extraction Report, they need to provide a report name, country code, and upload a file containing site links.  \nWhen the test is run, a certain amount of time is needed to proccess the data. When a report is generated, it gains a specific ID. When successfuly generating a report, the user can download result file.\n\n  \nThis API smoke test for PlaceLab consists of:  \n**Given** User is logged in and receives an authorization token that has to be used to send a request to create a Data extraction report.  \n**When** User creates a report a report ID is received, that can be used to check the status of the report. The report need some time to be created so I put a timeout function inside the test that checks if the report was created. That way automatic test will loop every 10 minutes and check if the report was created.  \n**Then** User obtains report status \"Finished\" and is able to download the result file.\n\n  \nAfter running the test automatically for 3 iterations, a report summarizing the test execution was generated. The duration of the test was 1h30m because creating a report takes almost 30m, and average response time was 336 milliseconds.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27429152"
+	},
+	"item": [
+		{
+			"name": "Obtaining auth token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseJson = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"token\", responseJson.api_token);\r",
+							"pm.test(\"Verify Authentication response\", () =>{\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "{{validEmail}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{validPassword}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/sessions",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"sessions"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create report",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseJson = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"id\", responseJson.id);\r",
+							"pm.test(\"Verify that Report is successfully created\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"    pm.expect(responseJson.state).to.be.a(\"string\");\r",
+							"    pm.expect(responseJson.state).to.be.eql(\"CREATED\");\r",
+							"    pm.expect(responseJson.state).to.not.be.eql(\"INVALID FILE\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/D:/2022/QAmp/API/PlaceLab/sample.csv"
+						},
+						{
+							"key": "delimiter",
+							"value": "\n",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/reports/data_extraction?name=Data Extraction_AH{{$randomInt}}&country_code=US",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"reports",
+						"data_extraction"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Data Extraction_AH{{$randomInt}}"
+						},
+						{
+							"key": "country_code",
+							"value": "US"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check report status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var responseJson = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"if (responseJson.state !== \"FINISHED\") {\r",
+							"    console.log(\"Retry request\");\r",
+							"    retryRequest();\r",
+							"    return;\r",
+							"} else {\r",
+							"    validateResponse();\r",
+							"    return;\r",
+							"}\r",
+							"\r",
+							"function retryRequest() {\r",
+							"    if (responseJson.state !== \"INVALID FILE\") {\r",
+							"        // Retry the request after a 20-minute delay\r",
+							"        setTimeout(function() {\r",
+							"            postman.setNextRequest(pm.info.requestId);\r",
+							"        }, 10 * 60 * 1000); // 20 minutes in milliseconds\r",
+							"    } else {\r",
+							"        validateResponse();\r",
+							"        return;\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"function validateResponse() {\r",
+							"    pm.test(\"Verify response\", function() {\r",
+							"        pm.expect(pm.response.code).to.eql(200);\r",
+							"        pm.expect(responseJson.state).to.be.a(\"string\");\r",
+							"        pm.expect(responseJson.state).to.be.eql(\"FINISHED\");\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{url}}/api/v2/reports/{{id}}/status",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"reports",
+						"{{id}}",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download result file",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{url}}/api/v2/reports/{{id}}/download",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"reports",
+						"{{id}}",
+						"download"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
