@@ -1,0 +1,221 @@
+{
+	"id": "1adc402c-00e3-4ac5-b0ad-bb3673825428",
+	"name": "PlaceLab_SmokeTest",
+	"timestamp": "2023-05-26T11:38:12.486Z",
+	"collection_id": "27429152-67197775-88ef-410a-bc52-8a3ffa1cbe1a",
+	"folder_id": 0,
+	"environment_id": "27429152-d86b10c2-01d7-475e-b0ae-628986aa0655",
+	"totalPass": 21,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2023-05-26T10:08:03.394Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "87a0078f-b7eb-4677-92c1-a90d7eeb7b6d",
+			"name": "Obtaining auth token",
+			"url": "https://demo.placelab.com/api/v2/sessions",
+			"time": 129,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Verify Authentication response": true
+			},
+			"testPassFailCounts": {
+				"Verify Authentication response": {
+					"pass": 3,
+					"fail": 0
+				}
+			},
+			"times": [
+				472,
+				133,
+				129
+			],
+			"allTests": [
+				{
+					"Verify Authentication response": true
+				},
+				{
+					"Verify Authentication response": true
+				},
+				{
+					"Verify Authentication response": true
+				}
+			]
+		},
+		{
+			"id": "a2a98002-ad51-46f0-b108-2cd73e9986ce",
+			"name": "Create report",
+			"url": "https://demo.placelab.com/api/v2/reports/data_extraction?name=Data Extraction_AH356&country_code=US",
+			"time": 297,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Verify that Report is successfully created": true
+			},
+			"testPassFailCounts": {
+				"Verify that Report is successfully created": {
+					"pass": 3,
+					"fail": 0
+				}
+			},
+			"times": [
+				264,
+				311,
+				297
+			],
+			"allTests": [
+				{
+					"Verify that Report is successfully created": true
+				},
+				{
+					"Verify that Report is successfully created": true
+				},
+				{
+					"Verify that Report is successfully created": true
+				}
+			]
+		},
+		{
+			"id": "c3e28589-2375-4fba-8bdb-c64ff4f1830f",
+			"name": "Check report status",
+			"url": "https://demo.placelab.com/api/v2/reports/181968/status",
+			"time": 437,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Verify response": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 12,
+					"fail": 0
+				},
+				"Verify response": {
+					"pass": 3,
+					"fail": 0
+				}
+			},
+			"times": [
+				163,
+				445,
+				595,
+				443,
+				193,
+				446,
+				475,
+				445,
+				167,
+				442,
+				431,
+				437
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true,
+					"Verify response": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true,
+					"Verify response": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true,
+					"Verify response": true
+				}
+			]
+		},
+		{
+			"id": "b7205bb9-3bde-4493-a2e7-795846f987fd",
+			"name": "Download result file",
+			"url": "https://demo.placelab.com/api/v2/reports/181968/download",
+			"time": 178,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				226,
+				196,
+				178
+			],
+			"allTests": [
+				{},
+				{},
+				{}
+			]
+		}
+	],
+	"count": 3,
+	"totalTime": 6888,
+	"collection": {
+		"requests": [
+			{
+				"id": "87a0078f-b7eb-4677-92c1-a90d7eeb7b6d",
+				"method": "POST"
+			},
+			{
+				"id": "a2a98002-ad51-46f0-b108-2cd73e9986ce",
+				"method": "POST"
+			},
+			{
+				"id": "c3e28589-2375-4fba-8bdb-c64ff4f1830f",
+				"method": "GET"
+			},
+			{
+				"id": "c3e28589-2375-4fba-8bdb-c64ff4f1830f",
+				"method": "GET"
+			},
+			{
+				"id": "c3e28589-2375-4fba-8bdb-c64ff4f1830f",
+				"method": "GET"
+			},
+			{
+				"id": "c3e28589-2375-4fba-8bdb-c64ff4f1830f",
+				"method": "GET"
+			},
+			{
+				"id": "b7205bb9-3bde-4493-a2e7-795846f987fd",
+				"method": "GET"
+			}
+		]
+	}
+}
